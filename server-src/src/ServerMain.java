@@ -2,13 +2,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ServerMain {
+    private static int port = 5000;
+
     public static void main(String[] args) {
-        int port = 5000;
         System.out.println("Server dang chay...");
         try {
             ServerSocket serverSocket = new ServerSocket(port);
-            Socket clientSocket = serverSocket.accept();
-            System.out.println("Client da ket noi.");
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                new ClientThread(clientSocket).start();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

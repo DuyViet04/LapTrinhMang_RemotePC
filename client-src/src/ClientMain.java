@@ -1,12 +1,35 @@
+import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ClientMain {
-    public static void main(String[] args) {
-        String pcHost = "10.10.239.176";
-        int port = 5000;
+    public static int port = 5000;
 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        BufferedReader reader = null;
+        PrintWriter writer = null;
         try {
-            Socket socket = new Socket(pcHost, port);
+            // Chon host server
+            HostSelectionHandler.showHostServerOptions();
+            int choice = scanner.nextInt();
+            HostSelectionHandler.handleHostSelection(choice);
+            System.out.println("Da ket noi den may chu: " + HostSelectionHandler.chosenHost);
+
+            // Ket noi den server
+            Socket socket = new Socket(HostSelectionHandler.chosenHost, port);
+
+            writer = new PrintWriter(socket.getOutputStream(), true);
+
+            while (true) {
+                // Hien thi va chon request
+                RequestHandler.showRequestOptions();
+                choice = scanner.nextInt();
+                RequestHandler.handleRequest(choice);
+                System.out.println("Yeu cau da duoc gui den server: " + RequestHandler.executionResult);
+                writer.println(RequestHandler.executionResult);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
