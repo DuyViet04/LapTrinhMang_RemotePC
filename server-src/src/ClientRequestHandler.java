@@ -1,26 +1,22 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+
+import static java.lang.IO.println;
 
 public class ClientRequestHandler {
     private static BufferedReader reader;
 
-    public static void executeRequest(String request) throws IOException {
+    public static void executeRequest(String request, PrintWriter writer) throws IOException, InterruptedException {
         ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/c", request);
         pb.redirectErrorStream(true);
         Process process = pb.start();
 
         reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    }
 
-    public static List<String> requestResult() throws IOException {
         String line;
-        List<String> result = new ArrayList<>();
         while ((line = reader.readLine()) != null) {
-            result.add(line);
+            writer.println(line);
         }
-        return result;
+        writer.println("Xong");
+        process.waitFor();
     }
 }

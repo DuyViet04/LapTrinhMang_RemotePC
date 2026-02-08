@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 
 public class ClientThread extends Thread {
     private Socket socket;
@@ -18,21 +18,15 @@ public class ClientThread extends Thread {
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter writer = new PrintWriter(socket.getOutputStream(), true);
             String request;
             while ((request = reader.readLine()) != null) {
                 System.out.println(request);
 
                 // Thuc thi request
-                ClientRequestHandler.executeRequest(request);
-
-                // Ghi lai ket qua cua request
-                List<String> result = ClientRequestHandler.requestResult();
-
-                for (int i = 0; i < result.size(); i++) {
-                    System.out.println(result.get(i));
-                }
+                ClientRequestHandler.executeRequest(request, writer);
             }
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }

@@ -14,6 +14,7 @@ public class RequestHandler {
                 break;
             case 2:
                 executionResult = "fsutil fsinfo drives";
+                break;
             default:
                 System.out.println("Lua chon khong hop le.");
                 break;
