@@ -1,4 +1,4 @@
-package Client;
+package Client.Services;
 
 import java.util.Scanner;
 
@@ -13,9 +13,10 @@ public class RequestHandler {
         System.out.println("2. Xem các ổ đĩa trên máy");
         System.out.println("3. Xem thông tin thư mục/ổ đĩa");
         System.out.println("4. Điều hướng sang thư mục:...");
+        System.out.println("5. Điều hướng sang ổ đĩa:...");
     }
 
-        public static void HandleRequestSelection(int choice) {
+    public static void HandleRequestSelection(int choice) {
         switch (choice) {
             case 1:
                 Command = "ipconfig";
@@ -30,13 +31,16 @@ public class RequestHandler {
                 handleExtraCommand();
                 Command = "cd " + extraCommand;
                 break;
+            case 5:
+                handleExtraCommand();
+                Command = "cd /d " + extraCommand + ":/";
             default:
                 System.out.println("Không thể thực hiện lệnh");
                 break;
         }
     }
 
-    static void handleExtraCommand() {
+    private static void handleExtraCommand() {
         System.out.println("Nhập ổ đĩa/tên thư mục: ");
         extraCommand = new Scanner(System.in).nextLine();
     }
