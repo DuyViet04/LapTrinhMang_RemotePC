@@ -13,22 +13,24 @@ public class ServerThread extends Thread {
     @Override
     public void run() {
         super.run();
-        System.out.println("Client da ket noi, ip: " + clientSocket.getInetAddress());
+        System.out.println("Client đã kết nối, IP: " + clientSocket.getInetAddress());
 
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             PrintWriter writer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()), true);
 
-            ServerRequestHandler.initCmd();
+            // Mở CMD
+            ServerRequestHandler.InitCmd();
 
+            // Thực thi lệnh đã nhận
             while (true) {
                 String request = reader.readLine();
-                System.out.println("Lenh da nhan: " + request);
-                ServerRequestHandler.executeCommand(request, writer);
+                System.out.println("Lệnh đã nhận: " + request);
+                ServerRequestHandler.ExecuteCommand(request, writer);
             }
 
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

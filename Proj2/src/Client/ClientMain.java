@@ -5,17 +5,19 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class ClientMain {
-    public static int port = 5000;
+    private static final int port = 5000;
 
     static void main(String[] args) {
 //        SwingUtilities.invokeLater(ClientUi::new);
         Scanner scanner = new Scanner(System.in);
 
-        HostSelectionHandler.showHostList();
+        // Hiển thị và xử lý danh sách host
+        HostSelectionHandler.ShowHostList();
         int choice = scanner.nextInt();
-        HostSelectionHandler.handleHostSelection(choice);
+        HostSelectionHandler.HandleHostSelection(choice);
 
         try {
+            // Kết nối đến server
             Socket socket = new Socket(HostSelectionHandler.ChosenHost, port);
             System.out.println("Server ip: " + HostSelectionHandler.ChosenHost);
 
@@ -23,22 +25,22 @@ public class ClientMain {
             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             while (true) {
-                RequestHandler.showRequest();
+                // Hiển thị và xử lý lệnh
+                RequestHandler.ShowRequest();
                 int rqChoice = scanner.nextInt();
-                //scanner.nextLine();
-                RequestHandler.handleRequestSelection(rqChoice);
-                System.out.println("Lenh gui di la: " + RequestHandler.command);
+                RequestHandler.HandleRequestSelection(rqChoice);
+                System.out.println("Lệnh gửi đi là: " + RequestHandler.Command);
+                writer.println(RequestHandler.Command);
 
-                writer.println(RequestHandler.command);
-
+                // Hiển thị kết quả từ server
                 String line;
                 while ((line = reader.readLine()) != null) {
                     System.out.println(line);
                     if (line.trim().equals("Xong")) break;
                 }
             }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

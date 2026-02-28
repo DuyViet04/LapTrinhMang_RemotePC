@@ -6,7 +6,8 @@ public class ServerRequestHandler {
     private static PrintWriter cmdWriter;
     private static BufferedReader cmdReader;
 
-    public static void initCmd() throws IOException {
+    public static void InitCmd() throws IOException {
+        // Chạy chương trình CMD
         ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/k");
         pb.redirectErrorStream(true);
         Process proc = pb.start();
@@ -15,12 +16,13 @@ public class ServerRequestHandler {
         cmdReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
     }
 
-    public static void executeCommand(String command, PrintWriter writer) throws IOException, InterruptedException {
+    public static void ExecuteCommand(String command, PrintWriter writer) throws IOException, InterruptedException {
+        // Ghi lệnh vào CMD và thực hiện lệnh
         cmdWriter.println(command + " && echo Xong");
 
+        // Ghi lại kết quả sau khi thực hiện lệnh
         String line;
         while ((line = cmdReader.readLine()) != null) {
-            //if (line.equals("Xong")) break;
             writer.println(line);
             System.out.println(line);
 

@@ -3,28 +3,16 @@ package Client;
 public class HostSelectionHandler {
     public static String ChosenHost;
 
-    public static void showHostList() {
-        System.out.println("Chon may chu de ket noi:");
+    public static void ShowHostList() {
+        System.out.println("Chọn máy chủ để kết nối:");
         System.out.println("1. PC Host");
         System.out.println("2. Laptop Host");
     }
 
-//    public static void handleHostSelection(int choice) {
-//        switch (choice) {
-//            case 1:
-//                chosenHost = HostMapper.PcHost;
-//                break;
-//            case 2:
-//                chosenHost = HostMapper.LaptopHost;
-//                break;
-//            default:
-//                System.out.println("Khong co may chu");
-//                break;
-//        }
-//    }
-
-    public static void handleHostSelection(int choice) {
-        var hostList = HostMapper.getHostList();
+    public static void HandleHostSelection(int choice) {
+        var hostList = HostMapper.GetHostList();
+        if (choice > hostList.size())
+            System.out.println("Không hợp lệ");
         ChosenHost = hostList.get(choice - 1);
     }
 }
