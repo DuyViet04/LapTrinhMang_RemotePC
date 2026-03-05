@@ -12,7 +12,7 @@ public class ClientUi extends JFrame {
 
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
-        HostMapper.getHostList().get(0).toString();
+//        HostMapper.getHostList().get(0).toString();
 
         JButton btn = new JButton("dads");
         panel.add(btn);
