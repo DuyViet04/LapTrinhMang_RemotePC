@@ -3,10 +3,10 @@ package Server;
 import java.io.*;
 
 public class ServerRequestHandler {
-    private static PrintWriter cmdWriter;
-    private static BufferedReader cmdReader;
+    private PrintWriter cmdWriter;
+    private BufferedReader cmdReader;
 
-    public static void InitCmd() throws IOException {
+    public void initCmd() throws IOException {
         // Chạy chương trình CMD
         ProcessBuilder pb = new ProcessBuilder("cmd.exe", "/k");
         pb.redirectErrorStream(true);
@@ -16,9 +16,9 @@ public class ServerRequestHandler {
         cmdReader = new BufferedReader(new InputStreamReader(proc.getInputStream()));
     }
 
-    public static void ExecuteCommand(String command, PrintWriter writer) throws IOException, InterruptedException {
+    public void executeCommand(String command, PrintWriter writer) throws IOException, InterruptedException {
         // Ghi lệnh vào CMD và thực hiện lệnh
-        cmdWriter.println(command + " && echo Xong");
+        cmdWriter.println(command + " & echo Xong");
 
         // Ghi lại kết quả sau khi thực hiện lệnh
         String line;

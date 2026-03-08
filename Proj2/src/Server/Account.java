@@ -1,12 +1,12 @@
-package Client.Models;
+package Server;
 
 import Client.Role;
 
 public class Account {
-    public Role role;
+    public String role;
     public String password;
 
-    public Account(Role role, String password){
+    public Account(String role, String password){
         this.role = role;
         this.password = password;
     }

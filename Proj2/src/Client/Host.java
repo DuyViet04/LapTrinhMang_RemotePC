@@ -1,4 +1,4 @@
-package Client.Models;
+package Client;
 
 public class Host {
     public String hostName;
