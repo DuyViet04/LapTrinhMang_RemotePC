@@ -8,6 +8,13 @@ public class ServerMain {
     private static final int port = 5000;
 
     public static void main(String[] args) {
+        // Khởi động giao diện ServerGUI mới
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ServerGUI gui = new ServerGUI();
+            gui.setVisible(true);
+        });
+
+        /* ---- [ĐÃ COMMENT GIAO DIỆN CONSOLE CŨ ĐỂ THAM KHẢO] ----
         System.out.println("Server đang chạy...");
         try {
             ServerSocket serverSocket = new ServerSocket(port);
@@ -47,5 +54,6 @@ public class ServerMain {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        ---------------------------------------------------------- */
     }
 }

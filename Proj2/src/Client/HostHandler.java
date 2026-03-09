@@ -16,6 +16,10 @@ public class HostHandler {
         hostList.add(new Host("VT Laptop Host", vtLaptopHost));
     }
 
+    public List<Host> getHostList() {
+        return hostList;
+    }
+
     // Hiển thị danh sách máy chủ
     public void showHostList() {
         System.out.println("Chọn máy chủ để kết nối: ");

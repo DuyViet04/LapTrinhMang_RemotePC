@@ -5,15 +5,17 @@ import java.net.Socket;
 
 public class ServerThread extends Thread {
     Socket clientSocket;
+    ServerGUI gui;
 
-    public ServerThread(Socket clientSocket) {
+    public ServerThread(Socket clientSocket, ServerGUI gui) {
         this.clientSocket = clientSocket;
+        this.gui = gui;
     }
 
     @Override
     public void run() {
         super.run();
-        System.out.println("Client đã kết nối, IP: " + clientSocket.getInetAddress());
+        gui.appendLog("Tiến trình: Client đang đăng nhập từ IP " + clientSocket.getInetAddress().getHostAddress());
 
         try {
             ServerRequestHandler serverRequestHandler = new ServerRequestHandler();
@@ -24,14 +26,14 @@ public class ServerThread extends Thread {
 
             // Đọc lệnh đăng nhập đầu tiên
             String loginRequest = reader.readLine();
-            System.out.println("Yêu cầu đăng nhập từ Client: " + loginRequest);
+            gui.appendLog("Yêu cầu đăng nhập từ Client: " + loginRequest);
 
             if (serverLoginHandler.checkLogin(loginRequest)) {
                 writer.println("LOGIN_SUCCESS");
-                System.out.println("Client đăng nhập thành công!");
+                gui.appendLog("Client (" + clientSocket.getInetAddress().getHostAddress() + ") đăng nhập thành công!");
             } else {
                 writer.println("LOGIN_FAIL");
-                System.out.println("Client đăng nhập thất bại. Đóng kết nối...");
+                gui.appendLog("Client đăng nhập thất bại. Đóng kết nối... (" + clientSocket.getInetAddress().getHostAddress() + ")");
                 clientSocket.close();
                 return; // Ngắt Thread tại đây
             }
@@ -43,11 +45,11 @@ public class ServerThread extends Thread {
             while (true) {
                 String request = reader.readLine();
                 if (request == null) {
-                    System.out.println("Client đã ngắt kết nối.");
+                    gui.appendLog("Client đã ngắt kết nối. (" + clientSocket.getInetAddress().getHostAddress() + ")");
                     break;
                 }
                 
-                System.out.println("Lệnh đã nhận: " + request);
+                gui.appendLog("Lệnh đã nhận từ Client: " + request);
                 serverRequestHandler.executeCommand(request, writer);
             }
 

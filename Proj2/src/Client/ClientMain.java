@@ -7,7 +7,14 @@ import java.util.Scanner;
 public class ClientMain {
     private static final int port = 5000;
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
+        // Khởi động giao diện ClientGUI mới
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            ClientGUI gui = new ClientGUI();
+            gui.setVisible(true);
+        });
+
+        /* ---- [ĐÃ COMMENT GIAO DIỆN CONSOLE CŨ ĐỂ THAM KHẢO] ----
         // Init
         HostHandler hostHandler = new HostHandler();
         LoginHandler loginHandler = new LoginHandler();
@@ -70,5 +77,6 @@ public class ClientMain {
                 e.printStackTrace();
             }
         }
+        -------------------------------------------------------- */
     }
 }
