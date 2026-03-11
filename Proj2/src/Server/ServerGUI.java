@@ -11,9 +11,9 @@ import java.util.Date;
 public class ServerGUI extends JFrame {
     private static final int port = 5000;
     
-    private JButton startBtn;
-    private JLabel statusLabel;
-    private JTextArea logArea;
+    private final JButton startBtn;
+    private final JLabel statusLabel;
+    private final JTextArea logArea;
     
     private ServerSocket serverSocket;
     private Thread serverAcceptThread;
@@ -27,7 +27,7 @@ public class ServerGUI extends JFrame {
         setLocationRelativeTo(null);
         
         // --- Top Panel ---
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
+        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
         startBtn = new JButton("Khởi động Server");
         statusLabel = new JLabel("Trạng thái: Đã dừng");
         statusLabel.setForeground(Color.RED);
@@ -52,8 +52,7 @@ public class ServerGUI extends JFrame {
     // Thêm log hệ thống vào màn hình hiển thị
     public void appendLog(String message) {
         SwingUtilities.invokeLater(() -> {
-            String timeStamp = new SimpleDateFormat("HH:mm:ss").format(new Date());
-            logArea.append("[" + timeStamp + "] " + message + "\n");
+            logArea.append(message + "\n");
             logArea.setCaretPosition(logArea.getDocument().getLength());
         });
     }
@@ -75,14 +74,14 @@ public class ServerGUI extends JFrame {
             
             startBtn.setText("Dừng Server");
             statusLabel.setText("Trạng thái: Đang chạy (Port " + port + ")");
-            statusLabel.setForeground(new Color(0, 153, 0)); // Xanh lá cây sẫm
+            statusLabel.setForeground(Color.GREEN);
             
             appendLog("Server đã khởi động ở port " + port + ". Đang lắng nghe kết nối...");
             
             // Khởi chạy Thread lắng nghe accept()
             serverAcceptThread = new Thread(() -> listenForClients());
             serverAcceptThread.start();
-        } catch (IOException e) {
+        } catch (Exception e) {
             appendLog("Lỗi khi khởi động Server: " + e.getMessage());
             JOptionPane.showMessageDialog(this, "Không thể khởi động Server ở port " + port, "Lỗi", JOptionPane.ERROR_MESSAGE);
         }
@@ -95,7 +94,7 @@ public class ServerGUI extends JFrame {
             if (serverSocket != null && !serverSocket.isClosed()) {
                 serverSocket.close();
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             appendLog("Lỗi khi đóng ServerSocket: " + e.getMessage());
         }
         
@@ -131,12 +130,12 @@ public class ServerGUI extends JFrame {
                         appendLog("Đã từ chối kết nối từ " + clientIP + ".");
                         try {
                             clientSocket.close();
-                        } catch (IOException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                 });
-            } catch (IOException e) {
+            } catch (Exception e) {
                 if (isRunning) {
                     appendLog("Lỗi khi chờ client: " + e.getMessage());
                 }

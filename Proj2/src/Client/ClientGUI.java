@@ -8,10 +8,10 @@ import java.net.Socket;
 public class ClientGUI extends JFrame {
     private static final int port = 5000;
 
-    private CardLayout cardLayout;
-    private JPanel mainPanel;
+    private final CardLayout cardLayout;
+    private final JPanel mainPanel;
 
-    private HostHandler hostHandler;
+    private final HostHandler hostHandler;
 
     private Host chosenHost;
     private Socket socket;
@@ -46,11 +46,11 @@ public class ClientGUI extends JFrame {
         JPanel panel = new JPanel(new BorderLayout());
         JLabel label = new JLabel("Chọn máy chủ để kết nối:", SwingConstants.CENTER);
         label.setFont(new Font("SansSerif", Font.BOLD, 18));
-        label.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        label.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         panel.add(label, BorderLayout.NORTH);
 
-        JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 10, 10));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 100, 20, 100));
+        JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 20, 20));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         for (Host host : hostHandler.getHostList()) {
             JButton btn = new JButton(host.hostName);
@@ -104,7 +104,7 @@ public class ClientGUI extends JFrame {
         gbc.gridy = 1;
         panel.add(passField, gbc);
 
-        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         btnPanel.add(backBtn);
         btnPanel.add(loginBtn);
 
