@@ -29,6 +29,4 @@ public class ServerRequestHandler {
             if (line.equals("Xong")) break;
         }
     }
-
-
 }

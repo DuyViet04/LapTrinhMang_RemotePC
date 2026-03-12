@@ -29,12 +29,8 @@ public class ServerMain {
                 System.out.print("Chọn: ");
 
                 int choice = 0;
-                if (scanner.hasNextInt()) {
-                    choice = scanner.nextInt();
-                    scanner.nextLine();
-                } else {
-                    scanner.nextLine();
-                }
+                choice = scanner.nextInt();
+                scanner.nextLine();
 
                 switch (choice) {
                     case 1:

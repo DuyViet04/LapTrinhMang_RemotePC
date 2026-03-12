@@ -2,11 +2,11 @@ package Server;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 
 public class ServerGUI extends JFrame {
     private static final int port = 5000;
@@ -25,6 +25,14 @@ public class ServerGUI extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        
+        // Thêm Listener để xử lý khi người dùng đóng cửa sổ (X)
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                stopServer();
+            }
+        });
         
         // --- Top Panel ---
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 20));
@@ -89,19 +97,17 @@ public class ServerGUI extends JFrame {
     
     // Dừng Server Socket
     private void stopServer() {
+        if (!isRunning) return;
         isRunning = false;
         try {
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
-            }
+            if (serverSocket != null) serverSocket.close();
+            appendLog("Server đã dừng. Các Client sẽ tự động ngắt kết nối.");
         } catch (Exception e) {
-            appendLog("Lỗi khi đóng ServerSocket: " + e.getMessage());
+            appendLog("Lỗi: " + e.getMessage());
         }
-        
         startBtn.setText("Khởi động Server");
         statusLabel.setText("Trạng thái: Đã dừng");
         statusLabel.setForeground(Color.RED);
-        appendLog("Server đã dừng.");
     }
     
     // Lắng nghe và xử lý kết nối từ Client
@@ -110,35 +116,15 @@ public class ServerGUI extends JFrame {
             try {
                 Socket clientSocket = serverSocket.accept();
                 String clientIP = clientSocket.getInetAddress().getHostAddress();
-                appendLog("Có client muốn kết nối từ IP: " + clientIP);
                 
-                // Mở hộp thoại hỏi Admin có cho phép không
-                SwingUtilities.invokeLater(() -> {
-                    int choice = JOptionPane.showConfirmDialog(
-                            this,
-                            "Client IP " + clientIP + " đang yêu cầu kết nối.\nBạn có muốn chấp nhận không?",
-                            "Yêu cầu kết nối",
-                            JOptionPane.YES_NO_OPTION,
-                            JOptionPane.QUESTION_MESSAGE
-                    );
-                    
-                    if (choice == JOptionPane.YES_OPTION) {
-                        appendLog("Đã chấp nhận kết nối từ " + clientIP + ". Chờ đăng nhập...");
-                        // Bắt đầu luồng cho Client mới
-                        new ServerThread(clientSocket, this).start();
-                    } else {
-                        appendLog("Đã từ chối kết nối từ " + clientIP + ".");
-                        try {
-                            clientSocket.close();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                if (isRunning) {
-                    appendLog("Lỗi khi chờ client: " + e.getMessage());
+                int choice = JOptionPane.showConfirmDialog(this, "Chấp nhận kết nối từ " + clientIP + "?");
+                if (choice == JOptionPane.YES_OPTION) {
+                    new ServerThread(clientSocket, this).start();
+                } else {
+                    clientSocket.close();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

@@ -1,7 +1,5 @@
 package Server;
 
-import Client.Role;
-
 public class Account {
     public String role;
     public String password;
